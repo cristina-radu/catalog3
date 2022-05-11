@@ -13,6 +13,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @ConditionalOnExpression("${insert.test.data}")
@@ -31,22 +33,31 @@ public class DataSetup implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        saveTeacher("FirstName1", "LastName1", "123456790", 10L);
-        saveTeacher("FirstName2", "LastName2", "123456791", 15L);
-        saveTeacher("FirstName3", "LastName3", "123456792", 22L);
-        saveTeacher("FirstName4", "LastName4", "123456793", 22L);
-        saveTeacher("FirstName5", "LastName5", "123456794", 3L);
-        saveTeacher("FirstName6", "LastName6", "123456790", 12L);
-        saveTeacher("FirstName7", "LastName7", "123456791", 5L);
-        saveTeacher("FirstName8", "LastName8", "123456792", 22L);
-        saveTeacher("FirstName9", "LastName9", "123456793", 4L);
-        saveTeacher("FirstName10", "LastName10", "123456794", 2L);
 
-        saveSubject("Subject1", true, 5);
-        saveSubject("Subject2", true, 2);
-        saveSubject("Subject3", false, 4);
-        saveSubject("Subject4", false, 5);
-        saveSubject("Subject5", true, 5);
+
+       SubjectEntity subjectOne = saveSubject("Subject1", true, 5);
+        SubjectEntity subjectTwo = saveSubject("Subject2", true, 2);
+        SubjectEntity subjectThree = saveSubject("Subject3", false, 4);
+        SubjectEntity subjectFore = saveSubject("Subject4", false, 5);
+        SubjectEntity subjectFive= saveSubject("Subject5", true, 5);
+
+        List<SubjectEntity> subjects = new ArrayList<>();
+        subjects.add(subjectOne);
+        subjects.add(subjectTwo);
+        subjects.add(subjectThree);
+        subjects.add(subjectFore);
+        subjects.add(subjectFive);
+
+        saveTeacher("FirstName1", "LastName1", "1234567890123", 10L, subjects);
+        saveTeacher("FirstName2", "LastName2", "2234567890123", 15L, new ArrayList<>());
+        saveTeacher("FirstName3", "LastName3", "3234567890123", 22L, new ArrayList<>());
+        saveTeacher("FirstName4", "LastName4", "4234567890123", 22L, new ArrayList<>());
+        saveTeacher("FirstName5", "LastName5", "5234567890123", 3L, new ArrayList<>());
+        saveTeacher("FirstName6", "LastName6", "6234567890123", 12L, new ArrayList<>());
+        saveTeacher("FirstName7", "LastName7", "7234567890123", 5L, new ArrayList<>());
+        saveTeacher("FirstName8", "LastName8", "8234567890123", 22L, new ArrayList<>());
+        saveTeacher("FirstName9", "LastName9", "9234567890123", 4L, new ArrayList<>());
+        saveTeacher("FirstName10", "LastName10", "1034567890123", 2L, new ArrayList<>());
 
         saveStudent("Student1", "Student1", BigDecimal.TEN);
         saveStudent("Student2", "Student2", BigDecimal.TEN);
@@ -61,22 +72,21 @@ public class DataSetup implements ApplicationRunner {
 
     }
 
-    private void saveSubject(String name, Boolean optional, Integer creditPoints) {
+    private SubjectEntity saveSubject(String name, Boolean optional, Integer creditPoints) {
         SubjectEntity subjectEntity = new SubjectEntity();
         subjectEntity.setName(name);
         subjectEntity.setOptional(optional);
         subjectEntity.setCreditPoints(creditPoints);
-
-        subjectService.saveSubject(subjectEntity);
+        return subjectService.saveSubject(subjectEntity);
     }
 
-    private void saveTeacher(String firstName, String lastName, String cnp, Long salary) {
+    private void saveTeacher(String firstName, String lastName, String cnp, Long salary, List<SubjectEntity> subjects) {
         TeacherEntity teacherEntity = new TeacherEntity();
         teacherEntity.setFirstName(firstName);
         teacherEntity.setLastName(lastName);
         teacherEntity.setCnp(cnp);
         teacherEntity.setSalary(salary);
-
+        teacherEntity.setSubjects(subjects);
         teacherService.saveTeacher(teacherEntity);
     }
 

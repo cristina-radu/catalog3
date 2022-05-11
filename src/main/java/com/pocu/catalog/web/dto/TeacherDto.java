@@ -9,7 +9,7 @@ public class TeacherDto extends TeacherBasicDetailsDto {
     @Size(min = 13, max = 13, message = "cnp.size.invalid")
     @Pattern(regexp = "[0-9]+", message = "cnp.invalid")
     private String cnp;
-    @NotNull(message = "dateOfBirth.cannot.be.null")
+   // @NotNull(message = "dateOfBirth.cannot.be.null")
     private LocalDate dateOfBirth;
     @NotNull(message = "salary.cannot.be.null")
     @Min(value = 1, message = "salary.cannot.be.negative")
